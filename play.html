@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jouer — Défi-Amis+</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg">
+  <main class="card">
+    <div class="top">
+      <button class="back" onclick="location.href='index.html'">← Accueil</button>
+      <div></div>
+    </div>
+
+    <h2 id="roomTitle"></h2>
+    <p class="muted" id="roomInfo"></p>
+
+    <div id="joinArea" class="center">
+      <input id="playerName" type="text" placeholder="Ton prénom..." />
+      <button id="btnJoin" class="btn primary">Rejoindre & Jouer</button>
+    </div>
+
+    <form id="quizForm" class="hidden">
+      <div id="questions"></div>
+      <div class="row">
+        <button id="btnSubmit" class="btn">Terminer & Voir Résultat</button>
+      </div>
+    </form>
+
+    <div id="resultArea" class="hidden created"></div>
+
+    <h3 id="leaderHeader" class="muted hidden">Les amis de <span id="hostNameTitle"></span></h3>
+    <ol id="leaderboard" class="leaderboard"></ol>
+  </main>
+
+  <canvas id="confetti" class="confetti hidden"></canvas>
+
+<script>
+  function $(id){return document.getElementById(id);}
+  const params=new URLSearchParams(location.search);
+  const uid=params.get('uid');
+  if(!uid){ alert('UID manquant'); location.href='index.html'; }
+  const key=`defi_room_${uid}`;
+  let room = JSON.parse(localStorage.getItem(key) || '{}');
+  if(!room || !room.answers){ alert('Salle introuvable.'); location.href='index.html'; }
+
+  $('roomTitle').textContent = `Défi de ${room.host}`;
+  $('roomInfo').textContent = `UID: ${uid} • ${room.premium ? 'Premium' : 'Standard'}`;
+  $('hostNameTitle').textContent = room.host;
+
+  const prompts = [
+    "Quel est son plat préféré ?",
+    "Quel est son sport préféré ?",
+    "Quel est son animal préféré ?",
+    "Quelle est sa couleur préférée ?",
+    "Quel est son rêve le plus fou ?"
+  ];
+
+  // If premium required, check localStorage for any premium_access_* unexpired
+  function hasPremiumAccess(){
+    if(!room.premium) return true;
+    // check any premium_access_* entries
+    for(const k in localStorage){
+      if(k.startsWith('premium_access_')){
+        try{
+          const obj = JSON.parse(localStorage.getItem(k));
+          if(obj && obj.until && Date.now() < obj.until) return true;
+        }catch(e){}
+      }
+    }
+    return false;
+  }
+
+  // join and start
+  $('btnJoin').addEventListener('click', ()=>{
+    const name= $('playerName').value.trim();
+    if(!name) return alert('Entre ton prénom.');
+    if(room.premium && !hasPremiumAccess()){
+      if(confirm('Ce défi est premium. Veux-tu entrer un code natCash maintenant ?')) location.href = `verify.html?redirect=play.html?uid=${encodeURIComponent(uid)}`;
+      else return;
+    }
+    startQuiz(name);
+  });
+
+  function startQuiz(playerName){
+    $('joinArea').classList.add('hidden');
+    $('quizForm').classList.remove('hidden');
+    const qWrap = $('questions'); qWrap.innerHTML = '';
+    room.answers.forEach((_,i)=>{
+      const div = document.createElement('div'); div.className='question';
+      div.innerHTML = `<label>${i+1}. ${prompts[i] || 'Question'}</label><input id="r${i}" type="text" placeholder="Ta réponse..." />`;
+      qWrap.appendChild(div);
+    });
+  }
+
+  $('btnSubmit').addEventListener('click', ()=>{
+    const player = $('playerName').value.trim() || 'Invité';
+    let score=0; const guestAnswers=[];
+    room.answers.forEach((ans,i)=>{
+      const a = (document.getElementById(`r${i}`).value||'').trim();
+      guestAnswers.push(a);
+      if(a.toLowerCase() === (ans||'').toLowerCase()) score++;
+    });
+    room.players = room.players || [];
+    room.players.push({ name: player, score, answers: guestAnswers, playedAt: new Date().toISOString() });
+    localStorage.setItem(key, JSON.stringify(room));
+    showResult(player,score);
+    renderLeaderboard();
+  });
+
+  function showResult(name,score){
+    $('quizForm').classList.add('hidden');
+    $('resultArea').classList.remove('hidden');
+    $('resultArea').innerHTML = `<h3>Félicitations ${escapeHtml(name)} 🎉</h3>
+      <p>Tu as obtenu <strong>${score}</strong> / ${room.answers.length}</p>
+      <div class="row">
+        <button class="btn primary" onclick="location.href='create.html'">Créer ton propre défi</button>
+        <button class="btn ghost" onclick="location.href='play.html?uid=${encodeURIComponent(uid)}'">Rejouer</button>
+      </div>`;
+    burstConfetti();
+  }
+
+  function renderLeaderboard(){
+    const list = (room.players || []).slice().sort((a,b)=>b.score - a.score);
+    const ol = $('leaderboard'); ol.innerHTML = '';
+    if(list.length===0){ ol.innerHTML = '<li>Aucun joueur pour le moment</li>'; $('leaderHeader').classList.add('hidden'); return; }
+    $('leaderHeader').classList.remove('hidden');
+    list.forEach(p=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${escapeHtml(p.name)}</strong> — ${p.score}/${room.answers.length} <div class="small muted">${new Date(p.playedAt).toLocaleString()}</div>`;
+      ol.appendChild(li);
+    });
+  }
+
+  // confetti
+  function burstConfetti(){
+    const c = $('confetti'); c.classList.remove('hidden'); c.width=innerWidth; c.height=innerHeight;
+    const ctx = c.getContext('2d'); const parts=[];
+    for(let i=0;i<120;i++) parts.push({x:Math.random()*c.width,y:-10,vx:(Math.random()-0.5)*6,vy:Math.random()*4+2,r:Math.random()*6+3,color:['#ff4d7e','#ffd166','#06d6a0','#8ec5ff'][Math.floor(Math.random()*4)]});
+    let t=0; function f(){ ctx.clearRect(0,0,c.width,c.height); parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }); t++; if(t<180) requestAnimationFrame(f); else c.classList.add('hidden'); } f();
+  }
+
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // initial leaderboard render
+  renderLeaderboard();
+  // poll for external updates (multiple tabs)
+  setInterval(()=>{ room = JSON.parse(localStorage.getItem(key) || '{}'); renderLeaderboard(); }, 1500);
+
+</script>
+</body>
+</html>
