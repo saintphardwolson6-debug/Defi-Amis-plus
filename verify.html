@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vérifier Code natCash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg">
+  <main class="card center">
+    <h2>Vérifier ton code natCash</h2>
+    <p class="muted">Envoie 50 HTG sur natCash puis entre le code reçu.</p>
+
+    <input id="codeInput" type="text" placeholder="Entrer le code de transaction" />
+    <div class="row">
+      <button id="btnVerify" class="btn primary">Vérifier</button>
+      <a href="premium.html" class="btn ghost">Comment payer ?</a>
+    </div>
+
+    <p id="msg" class="small muted" style="margin-top:10px"></p>
+  </main>
+
+<script>
+  async function loadCodes(){
+    try{
+      const r = await fetch('codes-valid.txt?' + Date.now());
+      const txt = await r.text();
+      return txt.split(/\r?\n/).map(s=>s.trim()).filter(s=>s && !s.startsWith('#'));
+    }catch(e){
+      // fallback: embedded list
+      return ['NAT12345','VIP2025','PLUS-HTG-50'];
+    }
+  }
+
+  document.getElementById('btnVerify').addEventListener('click', async ()=>{
+    const code = (document.getElementById('codeInput').value || '').trim();
+    if(!code) return alert('Entre un code.');
+    const codes = await loadCodes();
+    if(codes.includes(code)){
+      // grant premium: store expiry 30 days
+      const until = Date.now() + 30*24*60*60*1000;
+      localStorage.setItem(`premium_access_${code}`, JSON.stringify({ grantedAt: Date.now(), until }));
+      localStorage.setItem('lastPremiumCode', code);
+      document.getElementById('msg').textContent = 'Code valide — accès premium activé pendant 30 jours 🎉';
+    } else {
+      document.getElementById('msg').textContent = 'Code invalide ou expiré. Vérifie et réessaye.';
+    }
+  });
+</script>
+</body>
+</html>
