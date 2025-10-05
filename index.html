@@ -1,0 +1,60 @@
+html
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Défi-Amis+</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg">
+  <main class="card center">
+    <div class="logo">Défi<span class="accent">Amis+</span></div>
+    <h1>Bienvenue</h1>
+    <p class="muted">Crée ton défi ou rejoins une salle par UID. Pour les fonctionnalités premium, achetez natCash et entrez un code.</p>
+
+    <div class="row">
+      <input id="creatorName" type="text" placeholder="Ton prénom / pseudo" />
+      <button id="btnCreate" class="btn primary">Créer un défi</button>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <input id="joinUID" type="text" placeholder="Entrer UID (ex: ALEX-3F5G7)" />
+      <button id="btnJoin" class="btn">Rejoindre</button>
+    </div>
+
+    <div class="row" style="margin-top:14px">
+      <a href="premium.html" class="btn ghost">Qu'est-ce que Défi-Amis+ ?</a>
+      <a href="verify.html" class="btn ghost">Entrer un code natCash</a>
+    </div>
+
+    <p class="small muted" style="margin-top:12px">Les données sont locales (localStorage). Pour partage: copiez le lien après création.</p>
+  </main>
+
+<script>
+  function genUID(seed='USER'){
+    const s = (seed||'USER').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,6) || 'USER';
+    return `${s}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
+  }
+
+  document.getElementById('btnCreate').addEventListener('click', ()=>{
+    const name = document.getElementById('creatorName').value.trim();
+    if(!name){ alert('Entre ton prénom ou pseudo.'); return; }
+    const uid = genUID(name);
+    const key = `defi_room_${uid}`;
+    const room = { host: name, uid, answers: [], players: [], premium: false, createdAt: new Date().toISOString() };
+    localStorage.setItem(key, JSON.stringify(room));
+    localStorage.setItem('lastCreatedUID', uid);
+    location.href = `create.html?uid=${encodeURIComponent(uid)}`;
+  });
+
+  document.getElementById('btnJoin').addEventListener('click', ()=>{
+    const uid = document.getElementById('joinUID').value.trim();
+    if(!uid){ alert('Entre un UID.'); return; }
+    const key = `defi_room_${uid}`;
+    if(!localStorage.getItem(key)){ alert('Salle introuvable. Vérifie l\'UID.'); return; }
+    location.href = `play.html?uid=${encodeURIComponent(uid)}`;
+  });
+</script>
+</body>
+</html>
