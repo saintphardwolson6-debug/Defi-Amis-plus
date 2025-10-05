@@ -1,0 +1,40 @@
+/* style.css - Défi-Amis+ v1 (pro) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+:root{
+  --accent:#ff3b6b;
+  --bg1: linear-gradient(135deg,#0f1724 0%, #0b1020 60%);
+  --card:#ffffff;
+  --muted:#98a0b3;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+html,body{height:100%}
+body.bg{background:var(--bg1);color:#fff;padding:30px;display:flex;justify-content:center;align-items:flex-start}
+.card{background:var(--card);color:#111;border-radius:var(--radius);padding:18px;width:100%;max-width:760px;box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+.center{text-align:center}
+.logo{font-weight:700;font-size:20px}
+.accent{color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.back{background:transparent;border:none;color:var(--muted);cursor:pointer;font-weight:600}
+
+.row{display:flex;gap:10px;margin-top:12px;align-items:center}
+.row input[type=text], input[type=checkbox], input {flex:1;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)}
+.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#ff7aa2);color:white}
+.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
+.question{margin-top:10px}
+.question label{display:block;margin-bottom:6px;font-weight:600}
+.question input{width:100%;padding:10px;border-radius:8px;border:1px solid #eee}
+.created{margin-top:12px;padding:12px;border-radius:10px;background:#fff}
+.leaderboard{list-style:none;padding:0;margin-top:8px}
+.leaderboard li{background:linear-gradient(90deg,rgba(255,59,107,0.04),rgba(255,186,203,0.02));padding:10px;border-radius:8px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+.confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+.hidden{display:none}
+.inline{display:inline-flex;align-items:center;gap:8px}
+.icon{width:36px;height:36px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:#fff}
+.fade-in{animation:fadeIn .6s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:640px){ .card{padding:14px} .row{flex-direction:column} input{width:100%} }
