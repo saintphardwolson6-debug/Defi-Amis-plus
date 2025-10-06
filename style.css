@@ -1,40 +1,62 @@
-/* style.css - Défi-Amis+ v1 (pro) */
+/* plus/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
 :root{
-  --accent:#ff3b6b;
-  --bg1: linear-gradient(135deg,#0f1724 0%, #0b1020 60%);
-  --card:#ffffff;
-  --muted:#98a0b3;
-  --radius:12px;
+  --bg-1: linear-gradient(120deg,#2b5876,#4e4376);
+  --accent:#ff4b6e;
+  --muted:#9aa4b2;
+  --card-bg:#fff;
+  --card-radius:14px;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
-html,body{height:100%}
-body.bg{background:var(--bg1);color:#fff;padding:30px;display:flex;justify-content:center;align-items:flex-start}
-.card{background:var(--card);color:#111;border-radius:var(--radius);padding:18px;width:100%;max-width:760px;box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;margin:0;padding:0}
+body.bg-plus{min-height:100vh;background:var(--bg-1);display:flex;align-items:center;justify-content:center;padding:24px;color:#fff}
+.card{background:var(--card-bg);color:#111;border-radius:var(--card-radius);padding:18px;width:100%;max-width:960px;box-shadow:0 20px 60px rgba(2,6,23,0.6)}
 .center{text-align:center}
-.logo{font-weight:700;font-size:20px}
-.accent{color:var(--accent)}
+.logo{font-weight:800;font-size:20px}
+.logo .plus{color:var(--accent)}
 .muted{color:var(--muted)}
 .small{font-size:13px;color:var(--muted)}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.back{background:transparent;border:none;color:var(--muted);cursor:pointer;font-weight:600}
 
-.row{display:flex;gap:10px;margin-top:12px;align-items:center}
-.row input[type=text], input[type=checkbox], input {flex:1;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)}
-.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
-.btn.primary{background:linear-gradient(90deg,var(--accent),#ff7aa2);color:white}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.back{background:transparent;border:none;color:var(--muted);cursor:pointer}
+
+.row{display:flex;gap:10px;align-items:center;margin-top:12px}
+.btn{padding:10px 14px;border-radius:10px;border:none;background:#111;color:#fff;cursor:pointer;font-weight:700}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#ff7aa2)}
 .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
-.question{margin-top:10px}
-.question label{display:block;margin-bottom:6px;font-weight:600}
-.question input{width:100%;padding:10px;border-radius:8px;border:1px solid #eee}
-.created{margin-top:12px;padding:12px;border-radius:10px;background:#fff}
-.leaderboard{list-style:none;padding:0;margin-top:8px}
-.leaderboard li{background:linear-gradient(90deg,rgba(255,59,107,0.04),rgba(255,186,203,0.02));padding:10px;border-radius:8px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+
+.form-block label{display:block;margin-top:12px;font-weight:600}
+input, select, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #eee;margin-top:6px}
+
+.avatar-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.avatar{width:64px;height:64px;border-radius:10px;overflow:hidden;border:2px solid transparent;cursor:pointer}
+.avatar.selected{border-color:var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+.questions-list .question{margin-top:8px;border-radius:8px;padding:8px;background:#f6f7fb}
+.questions-list input{margin-top:6px}
+
+.created{margin-top:12px;padding:12px;border-radius:10px;background:#f7f7fb}
 .hidden{display:none}
-.inline{display:inline-flex;align-items:center;gap:8px}
-.icon{width:36px;height:36px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:#fff}
-.fade-in{animation:fadeIn .6s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media(max-width:640px){ .card{padding:14px} .row{flex-direction:column} input{width:100%} }
+
+.host-info{display:flex;gap:12px;align-items:center}
+.avatar-large{width:72px;height:72px;border-radius:12px;object-fit:cover}
+
+.quiz-area{margin-top:12px}
+.quiz-item{margin-top:10px;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(79,70,229,0.04),rgba(255,59,107,0.03))}
+
+.podium{display:flex;gap:10px;margin-top:8px}
+.podium .slot{flex:1;padding:10px;border-radius:8px;text-align:center;background:#fff}
+
+.leaderboard{list-style:none;padding-left:0;margin-top:10px}
+.leaderboard li{padding:8px;border-radius:8px;background:linear-gradient(90deg,rgba(255,59,107,0.03),rgba(79,70,229,0.02));margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+
+.icon-btn{background:#fff;border-radius:8px;padding:8px 10px;border:none;cursor:pointer}
+.share-row{display:flex;gap:8px;align-items:center}
+
+/* responsive */
+@media(max-width:720px){
+  .row{flex-direction:column}
+  .avatar-list{justify-content:center}
+}
