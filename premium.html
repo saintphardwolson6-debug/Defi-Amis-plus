@@ -1,21 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Défi-Amis+ — Premium</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Défi Amis Plus+ | Premium</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app-plus.js" defer></script>
 </head>
-<body class="bg">
-<main class="card center">
-  <h2>Défi-Amis+ — Accès Premium</h2>
-  <p class="muted">Pour débloquer les fonctionnalités premium, envoie <strong>50 HTG</strong> via natCash à ce numéro :</p>
-  <p style="font-weight:700">509 55 86 56 21</p>
-  <p class="muted small">Après paiement, vous recevrez un code. Entrez ce code sur la page "Entrer un code natCash" (menu d'accueil).</p>
+<body>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/premium.mp3" type="audio/mpeg">
+  </audio>
 
-  <div class="row" style="margin-top:12px">
-    <a href="verify.html" class="btn primary">Entrer mon code</a>
-    <a href="index.html" class="btn ghost">Retour</a>
-  </div>
-</main>
+  <section class="premium-section">
+    <h2>🔥 Deviens Membre VIP 🔥</h2>
+    <p>Accède à toutes les fonctionnalités exclusives Premium.</p>
+
+    <div class="payment-box">
+      <h3>Paiement via NatCash</h3>
+      <p>Montant : <strong>50 HTG</strong></p>
+      <p>Numéro : <strong>509 5586 5621</strong></p>
+      <button id="simulatePayment">Simuler le Paiement</button>
+    </div>
+
+    <div id="vipCodeBox" style="display:none;">
+      <p>Ton code VIP est : <strong id="vipCode">TCH-VIP-509</strong></p>
+      <p>Bienvenue dans la zone Premium 💎</p>
+      <a href="create.html" class="btn-main">Créer ton Défi Premium</a>
+    </div>
+  </section>
 </body>
 </html>
