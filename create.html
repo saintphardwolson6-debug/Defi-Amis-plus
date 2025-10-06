@@ -9,11 +9,15 @@
 <body class="bg-plus">
   <main class="card">
     <div class="top">
-      <button class="back" onclick="location.href='index.html'">← Retour</button>
+      <button class="back" onclick="location.href='index.html'">← Accueil</button>
       <h2>Créer un défi Premium</h2>
     </div>
 
     <section class="form-block">
+      <div id="lockedNotice" class="locked-box hidden">
+        <p>🔒 Vous n'avez pas accès à la création. Entrez un code PIV / code d'accès sur la page d'accueil.</p>
+      </div>
+
       <label>Votre pseudo (hôte)</label>
       <input id="hostName" placeholder="Ex : Tchoulo" />
 
@@ -43,7 +47,7 @@
       </div>
 
       <div id="createdBox" class="created hidden"></div>
-      <p class="small muted">Les joueurs devront vérifier un code MonCash/NatCash si la room est premium.</p>
+      <p class="small muted">Partagez le lien avec vos amis. Les joueurs doivent avoir un code d'accès (ou PIV) pour jouer sur une room premium.</p>
     </section>
   </main>
 
