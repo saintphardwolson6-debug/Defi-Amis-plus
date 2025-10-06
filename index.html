@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Défi Amis Plus+</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Défi-Amis+ | Version Premium</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="app-plus.js" defer></script>
 </head>
 <body>
+
   <audio id="bg-music" autoplay loop>
-    <source src="music/theme.mp3" type="audio/mpeg">
+    <source src="music.mp3" type="audio/mpeg">
   </audio>
 
-  <header>
-    <h1>Défi Amis <span>Plus+</span></h1>
-    <p>Teste ton amitié, découvre ton niveau VIP 💫</p>
-  </header>
+  <div class="container">
+    <h1>🌟 Défi-Amis+ Premium</h1>
+    <p class="subtitle">Testez vos amitiés en version VIP 💛</p>
 
-  <main>
-    <button id="btnPlay" class="btn-main">Jouer un Défi</button>
-    <button id="btnCreate" class="btn-secondary">Créer un Défi</button>
-    <button id="btnPremium" class="btn-premium">Accès Premium</button>
-  </main>
+    <button id="playFree">🎯 Jouer Gratuitement</button>
+    <button id="payNatcash">💰 Payer via NatCash (50 HTG)</button>
+    <button id="vipAccess">🎟️ J'ai un code VIP</button>
+
+    <div id="vipZone" class="hidden">
+      <h2>Bienvenue dans le Club VIP 👑</h2>
+      <p>Votre code VIP : <strong id="vipCode">TCH-VIP-509</strong></p>
+      <button id="createDefi">✍️ Créer un Défi Premium</button>
+    </div>
+  </div>
 
   <footer>
-    <button id="muteBtn">🔇 / 🔊</button>
+    <p>© 2025 Défi-Amis+ — Créé par <strong>Tchoulo</strong></p>
   </footer>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>
