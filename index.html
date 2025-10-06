@@ -3,57 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Défi-Amis+</title>
+  <title>Défi-Amis+ — Premium</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg">
+<body class="bg-plus">
   <main class="card center">
-    <div class="logo">Défi<span class="accent">Amis+</span></div>
-    <h1>Bienvenue</h1>
-    <p class="muted">Crée ton défi ou rejoins une salle par UID. Pour les fonctionnalités premium, achetez natCash et entrez un code.</p>
+    <div class="logo">Défi-Amis<span class="plus">+</span></div>
+    <h1>Bienvenue sur Défi-Amis+</h1>
+    <p class="muted">Mode premium : avatars, thèmes, « Crush ou Ami? », badges et partage viral.</p>
 
     <div class="row">
-      <input id="creatorName" type="text" placeholder="Ton prénom / pseudo" />
-      <button id="btnCreate" class="btn primary">Créer un défi</button>
+      <a class="btn primary" href="create.html">Créer un défi Premium</a>
+      <a class="btn ghost" href="play.html">Rejoindre / Jouer</a>
     </div>
 
-    <div class="row" style="margin-top:12px">
-      <input id="joinUID" type="text" placeholder="Entrer UID (ex: TCHOULO-3F5G7)" />
-      <button id="btnJoin" class="btn">Rejoindre</button>
+    <div class="features">
+      <div class="feature">👤 Avatars personnalisés</div>
+      <div class="feature">💓 Mode « Crush ou Ami? »</div>
+      <div class="feature">🏆 Badges & Podium</div>
+      <div class="feature">🎵 Musique & thèmes</div>
     </div>
 
-    <div class="row" style="margin-top:14px">
-      <a href="premium.html" class="btn ghost">Qu'est-ce que Défi-Amis+ ?</a>
-      <a href="verify.html" class="btn ghost">Entrer un code natCash</a>
-    </div>
-
-    <p class="small muted" style="margin-top:12px">Les données sont locales (localStorage). Pour partage: copiez le lien après création.</p>
+    <footer class="small muted">Intégrez vos codes MonCash/NatCash dans Firestore → collection <code>codes</code>.</footer>
   </main>
-
-<script>
-  function genUID(seed='USER'){
-    const s = (seed||'USER').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,6) || 'USER';
-    return `${s}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
-  }
-
-  document.getElementById('btnCreate').addEventListener('click', ()=>{
-    const name = document.getElementById('creatorName').value.trim();
-    if(!name){ alert('Entre ton prénom ou pseudo.'); return; }
-    const uid = genUID(name);
-    const key = `defi_room_${uid}`;
-    const room = { host: name, uid, answers: [], players: [], premium: false, createdAt: new Date().toISOString() };
-    localStorage.setItem(key, JSON.stringify(room));
-    localStorage.setItem('lastCreatedUID', uid);
-    location.href = `create.html?uid=${encodeURIComponent(uid)}`;
-  });
-
-  document.getElementById('btnJoin').addEventListener('click', ()=>{
-    const uid = document.getElementById('joinUID').value.trim();
-    if(!uid){ alert('Entre un UID.'); return; }
-    const key = `defi_room_${uid}`;
-    if(!localStorage.getItem(key)){ alert('Salle introuvable. Vérifie l\'UID.'); return; }
-    location.href = `play.html?uid=${encodeURIComponent(uid)}`;
-  });
-</script>
 </body>
 </html>
