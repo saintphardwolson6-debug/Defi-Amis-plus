@@ -1,67 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jouer — Défi-Amis+</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Jouer | Défi Amis Plus+</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app-plus.js" defer></script>
 </head>
-<body class="bg-plus">
-  <main class="card">
-    <div class="top">
-      <button class="back" onclick="location.href='index.html'">← Accueil</button>
-      <h2 id="roomTitle">Chargement du défi...</h2>
-    </div>
+<body>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/play.mp3" type="audio/mpeg">
+  </audio>
 
-    <div id="joinArea" class="join-area">
-      <label>Entrer UID (ou ouvrir depuis lien)</label>
-      <input id="uidInput" placeholder="UID (ex : TCH-3F5G7)" />
-      <div class="row">
-        <button id="openByUID" class="btn ghost">Ouvrir</button>
-        <button id="openByLink" class="btn primary">Ouvrir depuis lien</button>
-      </div>
-    </div>
-
-    <div id="roomBlock" class="hidden">
-      <div class="host-info">
-        <img id="hostAvatar" class="avatar-large" src="" alt="avatar" />
-        <div>
-          <h3 id="hostNameTitle"></h3>
-          <p id="roomMeta" class="muted"></p>
-        </div>
-      </div>
-
-      <div id="musicControl" class="row">
-        <button id="toggleMusic" class="btn ghost">⏵ Musique</button>
-        <select id="themePreview" class="ghost">
-          <option value="default">Thème</option>
-        </select>
-      </div>
-
-      <div id="quizArea" class="quiz-area"></div>
-
-      <div id="playerForm" class="row" style="margin-top:12px">
-        <input id="playerName" placeholder="Votre prénom" />
-        <button id="startPlay" class="btn primary">Commencer</button>
-      </div>
-
-      <div id="resultBox" class="created hidden"></div>
-
-      <h3 class="muted">Classement — Les amis de <span id="hostDisplay"></span></h3>
-      <div id="podium" class="podium"></div>
-      <ol id="leaderboard" class="leaderboard"></ol>
-
-      <div class="share-row" style="margin-top:12px">
-        <button id="shareWA" class="icon-btn">WhatsApp</button>
-        <button id="shareTik" class="icon-btn">TikTok</button>
-        <button id="shareIG" class="icon-btn">Instagram</button>
-        <button id="copyLink" class="icon-btn">Copier</button>
-      </div>
-    </div>
-  </main>
-
-  <audio id="bgMusic" loop src="assets/music/bg-loop.mp3"></audio>
-
-  <script type="module" src="app-plus.js"></script>
+  <div class="game-box">
+    <h2>Réponds aux questions de ton ami 🤔</h2>
+    <div id="gameContainer"></div>
+  </div>
 </body>
-</html> 
+</html>
