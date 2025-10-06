@@ -9,22 +9,37 @@
 <body class="bg-plus">
   <main class="card center">
     <div class="logo">Défi-Amis<span class="plus">+</span></div>
-    <h1>Bienvenue sur Défi-Amis+</h1>
-    <p class="muted">Mode premium : avatars, thèmes, « Crush ou Ami? », badges et partage viral.</p>
+    <h1>Version Premium</h1>
+    <p class="muted">Avatars, thèmes, mode «Crush ou Ami?», badges, partage & plus.</p>
 
     <div class="row">
-      <a class="btn primary" href="create.html">Créer un défi Premium</a>
+      <!-- Create only if user has access (PIV or code) -->
+      <button id="btnCreate" class="btn primary">Créer un défi Premium</button>
       <a class="btn ghost" href="play.html">Rejoindre / Jouer</a>
     </div>
 
-    <div class="features">
-      <div class="feature">👤 Avatars personnalisés</div>
-      <div class="feature">💓 Mode « Crush ou Ami? »</div>
-      <div class="feature">🏆 Badges & Podium</div>
-      <div class="feature">🎵 Musique & thèmes</div>
+    <p class="small muted">Si vous n'avez pas encore d'accès, entrez un code PIV ou un code fourni par le créateur pour débloquer la création.</p>
+
+    <div style="margin-top:14px;">
+      <button id="btnEnterPiv" class="btn ghost">Entrer un code PIV / Accès</button>
     </div>
 
-    <footer class="small muted">Intégrez vos codes MonCash/NatCash dans Firestore → collection <code>codes</code>.</footer>
+    <div id="modal" class="modal hidden">
+      <div class="modal-card">
+        <h3>Accès Premium</h3>
+        <p>Entrez un code PIV (gratuit) ou un code d'accès (MonCash/NatCash) :</p>
+        <input id="accessCodeInput" placeholder="Votre code PIV / code d'accès" />
+        <div class="row" style="margin-top:8px">
+          <button id="validateCode" class="btn primary">Valider</button>
+          <button id="closeModal" class="btn ghost">Annuler</button>
+        </div>
+        <p class="small muted" style="margin-top:8px">Si vous êtes l'admin, ajoutez des codes PIV dans Firestore (collection <code>piv_codes</code>).</p>
+      </div>
+    </div>
+
+    <footer class="small muted" style="margin-top:18px">© Défi-Amis+ — Premium</footer>
   </main>
+
+  <script type="module" src="app-plus.js"></script>
 </body>
 </html>
