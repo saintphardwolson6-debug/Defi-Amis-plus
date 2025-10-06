@@ -2,72 +2,28 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Défi-Amis+ Premium</title>
+  <title>Défi Amis Plus+</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module">
-    import { texts, getLang, setLang } from "./lang.js";
-
-    const lang = getLang();
-    window.addEventListener("DOMContentLoaded", () => {
-      const t = texts[lang];
-      document.getElementById("title").textContent = t.title;
-      document.getElementById("desc").textContent = t.desc;
-      document.getElementById("playBtn").textContent = t.play;
-      document.getElementById("createBtn").textContent = t.create;
-      document.getElementById("vipText").innerHTML = `${t.vip}<br>${t.payment}`;
-      document.getElementById("vipBtn").textContent = t.becomeVIP;
-    });
-
-    window.changeLang = setLang;
-  </script>
+  <script type="module" src="app-plus.js" defer></script>
 </head>
 <body>
-  <audio id="bg-music" src="assets/theme.mp3" autoplay loop></audio>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/theme.mp3" type="audio/mpeg">
+  </audio>
 
-  <div class="lang-select">
-    🌐 <select onchange="changeLang(this.value)">
-      <option value="fr">🇫🇷 Français</option>
-      <option value="en">🇺🇸 English</option>
-      <option value="ht">🇭🇹 Kreyòl</option>
-    </select>
-  </div>
+  <header>
+    <h1>Défi Amis <span>Plus+</span></h1>
+    <p>Teste ton amitié, découvre ton niveau VIP 💫</p>
+  </header>
 
-  <div class="container">
-    <h1 id="title"></h1>
-    <p id="desc"></p>
+  <main>
+    <button id="btnPlay" class="btn-main">Jouer un Défi</button>
+    <button id="btnCreate" class="btn-secondary">Créer un Défi</button>
+    <button id="btnPremium" class="btn-premium">Accès Premium</button>
+  </main>
 
-    <button id="playBtn"></button>
-    <button id="createBtn" class="locked"></button>
-
-    <div class="vip-section">
-      <p id="vipText"></p>
-      <a href="peman.html" id="vipBtn" class="vip-btn"></a>
-    </div>
-  </div>
-
-  <script>
-    const vip = localStorage.getItem("isVIP");
-    const btn = document.getElementById("createBtn");
-    const lang = localStorage.getItem("lang") || "fr";
-
-    const msg = {
-      fr: "❌ Tu dois être VIP pour créer un défi !",
-      en: "❌ You must be VIP to create a challenge!",
-      ht: "❌ Ou dwe VIP pou kreye Défi!",
-    };
-
-    if (vip === "true") {
-      btn.classList.remove("locked");
-      btn.innerText = lang === "fr" ? "✨ Créer mon défi" : lang === "en" ? "✨ Create my challenge" : "✨ Kreye Défi mwen";
-      btn.onclick = () => location.href = "defi.html";
-    } else {
-      btn.onclick = () => alert(msg[lang]);
-    }
-
-    document.getElementById("playBtn").onclick = () => {
-      window.location.href = "defi.html";
-    };
-  </script>
+  <footer>
+    <button id="muteBtn">🔇 / 🔊</button>
+  </footer>
 </body>
 </html>
