@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un Défi - Défi-Amis+ GOLD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>🧠 Crée ton Défi</h1>
+    <p>Réponds à quelques questions pour tester tes amis ou ton crush 💘</p>
+  </header>
+
+  <section class="card">
+    <label>Mode :</label>
+    <select id="mode">
+      <option value="ami">Défi Ami 💛</option>
+      <option value="crush">Défi Crush 💘</option>
+    </select>
+
+    <label>Ton nom :</label>
+    <input type="text" id="nom" placeholder="Ex : Tchoulo">
+
+    <label>Question 1 :</label>
+    <input type="text" id="q1" placeholder="Ton plat préféré ?">
+
+    <label>Question 2 :</label>
+    <input type="text" id="q2" placeholder="Ton sport favori ?">
+
+    <label>Question 3 :</label>
+    <input type="text" id="q3" placeholder="Ta plus grande qualité ?">
+
+    <button onclick="saveDefi()">✅ Enregistrer le Défi</button>
+  </section>
+
+  <footer>
+    <p>💎 Version VIP activée — Gold Access 🔓</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
