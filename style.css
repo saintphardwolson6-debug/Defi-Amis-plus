@@ -1,27 +1,40 @@
 body {
+  background: linear-gradient(135deg, #ff0066, #6600ff);
+  color: #fff;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(45deg, #ff416c, #ff4b2b);
-  color: white;
   text-align: center;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.container, .game {
-  margin-top: 50px;
-  animation: fadeIn 1s ease;
+header h1 {
+  font-size: 2.5em;
+  margin-top: 40px;
 }
 
-button {
-  background: #fff;
-  color: #333;
-  border: none;
-  padding: 12px 20px;
-  margin: 10px;
-  border-radius: 10px;
+.btn-main, .btn-secondary, .btn-premium {
+  margin: 15px;
+  padding: 12px 25px;
   font-weight: bold;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: 0.3s;
 }
 
-button:hover {
-  transform
+.btn-main {
+  background-color: #ff0066;
+}
+
+.btn-secondary {
+  background-color: #444;
+}
+
+.btn-premium {
+  background-color: gold;
+  color: #000;
+}
+
+.btn-main:hover, .btn-premium:hover {
+  transform: scale(1.05);
+}
