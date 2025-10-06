@@ -1,56 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Créer un Défi Premium — Défi-Amis+</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Créer un Défi | Défi Amis Plus+</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app-plus.js" defer></script>
 </head>
-<body class="bg-plus">
-  <main class="card">
-    <div class="top">
-      <button class="back" onclick="location.href='index.html'">← Accueil</button>
-      <h2>Créer un défi Premium</h2>
-    </div>
+<body>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/create.mp3" type="audio/mpeg">
+  </audio>
 
-    <section class="form-block">
-      <div id="lockedNotice" class="locked-box hidden">
-        <p>🔒 Vous n'avez pas accès à la création. Entrez un code PIV / code d'accès sur la page d'accueil.</p>
-      </div>
-
-      <label>Votre pseudo (hôte)</label>
-      <input id="hostName" placeholder="Ex : Tchoulo" />
-
-      <label>Choisir un avatar</label>
-      <div id="avatarList" class="avatar-list"></div>
-
-      <label>Thème</label>
-      <select id="themeSelect">
-        <option value="default">Classique</option>
-        <option value="love">Saint-Valentin</option>
-        <option value="friends">Amis</option>
-        <option value="summer">Summer</option>
-      </select>
-
-      <label>Mode spécial</label>
-      <div class="inline">
-        <label><input type="checkbox" id="modeCrush"> Mode « Crush ou Ami ? »</label>
-        <label><input type="checkbox" id="modeAnon"> Mode Anonyme</label>
-      </div>
-
-      <label>Questions (5) — personnalisez les réponses de l'hôte</label>
-      <div id="questionsList" class="questions-list"></div>
-
-      <div class="row">
-        <button id="createRoom" class="btn primary">Terminer & Générer le lien</button>
-        <button id="previewRoom" class="btn ghost">Aperçu</button>
-      </div>
-
-      <div id="createdBox" class="created hidden"></div>
-      <p class="small muted">Partagez le lien avec vos amis. Les joueurs doivent avoir un code d'accès (ou PIV) pour jouer sur une room premium.</p>
-    </section>
-  </main>
-
-  <script type="module" src="app-plus.js"></script>
+  <section class="create-section">
+    <h2>Crée ton propre défi 💬</h2>
+    <form id="createForm">
+      <input type="text" id="username" placeholder="Ton nom" required>
+      <textarea id="questions" placeholder="Écris tes questions ici..." required></textarea>
+      <button type="submit" class="btn-main">Sauvegarder le Défi</button>
+    </form>
+  </section>
 </body>
 </html>
