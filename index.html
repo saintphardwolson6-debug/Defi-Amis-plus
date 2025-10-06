@@ -5,51 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Défi-Amis+ Premium</title>
   <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { texts, getLang, setLang } from "./lang.js";
+
+    const lang = getLang();
+    window.addEventListener("DOMContentLoaded", () => {
+      const t = texts[lang];
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("desc").textContent = t.desc;
+      document.getElementById("playBtn").textContent = t.play;
+      document.getElementById("createBtn").textContent = t.create;
+      document.getElementById("vipText").innerHTML = `${t.vip}<br>${t.payment}`;
+      document.getElementById("vipBtn").textContent = t.becomeVIP;
+    });
+
+    window.changeLang = setLang;
+  </script>
 </head>
 <body>
-
   <audio id="bg-music" src="assets/theme.mp3" autoplay loop></audio>
 
-  <header>
-    <h1>🎯 Défi-Amis+ Premium</h1>
-    <p>Teste ton amitié, découvre qui te connaît le mieux 💬</p>
-  </header>
+  <div class="lang-select">
+    🌐 <select onchange="changeLang(this.value)">
+      <option value="fr">🇫🇷 Français</option>
+      <option value="en">🇺🇸 English</option>
+      <option value="ht">🇭🇹 Kreyòl</option>
+    </select>
+  </div>
 
-  <main>
-    <div class="options">
-      <button id="playBtn">🎮 Jouer un défi</button>
-      <button id="createBtn" class="locked">🚫 Créer un défi (VIP uniquement)</button>
+  <div class="container">
+    <h1 id="title"></h1>
+    <p id="desc"></p>
+
+    <button id="playBtn"></button>
+    <button id="createBtn" class="locked"></button>
+
+    <div class="vip-section">
+      <p id="vipText"></p>
+      <a href="peman.html" id="vipBtn" class="vip-btn"></a>
     </div>
-
-    <section class="vip">
-      <h3>💎 Devenir VIP</h3>
-      <p>Accès complet à la version Premium — avatars, musique, classements et modes exclusifs.</p>
-      <p><b>Prix :</b> 50 HTG via <b>NatCash</b></p>
-      <p><b>Numéro :</b> 509 5586 5621</p>
-      <a href="peman.html" class="vip-btn">🔓 Accéder à la zone VIP</a>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Défi-Amis+. Créé par <b>Tchoulo</b> — Tous droits réservés.</p>
-  </footer>
+  </div>
 
   <script>
-    const isVIP = localStorage.getItem("isVIP");
-    const playBtn = document.getElementById("playBtn");
-    const createBtn = document.getElementById("createBtn");
+    const vip = localStorage.getItem("isVIP");
+    const btn = document.getElementById("createBtn");
+    const lang = localStorage.getItem("lang") || "fr";
 
-    playBtn.onclick = () => {
-      window.location.href = "jeu.html";
+    const msg = {
+      fr: "❌ Tu dois être VIP pour créer un défi !",
+      en: "❌ You must be VIP to create a challenge!",
+      ht: "❌ Ou dwe VIP pou kreye Défi!",
     };
 
-    if (isVIP === "true") {
-      createBtn.classList.remove("locked");
-      createBtn.innerText = "✨ Créer mon défi";
-      createBtn.onclick = () => window.location.href = "jeu.html";
+    if (vip === "true") {
+      btn.classList.remove("locked");
+      btn.innerText = lang === "fr" ? "✨ Créer mon défi" : lang === "en" ? "✨ Create my challenge" : "✨ Kreye Défi mwen";
+      btn.onclick = () => location.href = "defi.html";
     } else {
-      createBtn.onclick = () => alert("❌ Tu dois être VIP pour créer ton propre défi !");
+      btn.onclick = () => alert(msg[lang]);
     }
+
+    document.getElementById("playBtn").onclick = () => {
+      window.location.href = "defi.html";
+    };
   </script>
 </body>
 </html>
