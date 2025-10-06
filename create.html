@@ -3,74 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Créer Défi — Défi-Amis+</title>
+  <title>Créer un Défi Premium — Défi-Amis+</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg">
+<body class="bg-plus">
   <main class="card">
     <div class="top">
-      <button class="back" onclick="location.href='index.html'">← Accueil</button>
-      <div></div>
+      <button class="back" onclick="location.href='index.html'">← Retour</button>
+      <h2>Créer un défi Premium</h2>
     </div>
 
-    <h2 id="title">Créer ton défi</h2>
-    <p class="muted" id="subtitle">Réponds aux questions (texte libre). Active "Premium" si tu veux que seul(e)s les détenteurs d'un code puissent jouer.</p>
+    <section class="form-block">
+      <label>Votre pseudo (hôte)</label>
+      <input id="hostName" placeholder="Ex : Tchoulo" />
 
-    <div id="qList"></div>
+      <label>Choisir un avatar</label>
+      <div id="avatarList" class="avatar-list"></div>
 
-    <div class="row" style="margin-top:12px">
-      <label class="inline"><input type="checkbox" id="isPremium"> Défi Premium (accès par code)</label>
-      <button id="btnFinish" class="btn primary">Terminer & Générer Lobby</button>
-    </div>
+      <label>Thème</label>
+      <select id="themeSelect">
+        <option value="default">Classique</option>
+        <option value="love">Saint-Valentin</option>
+        <option value="friends">Amis</option>
+        <option value="summer">Summer</option>
+      </select>
 
-    <div id="created" class="created hidden"></div>
+      <label>Mode spécial</label>
+      <div class="inline">
+        <label><input type="checkbox" id="modeCrush"> Mode « Crush ou Ami ? »</label>
+        <label><input type="checkbox" id="modeAnon"> Mode Anonyme</label>
+      </div>
+
+      <label>Questions (5) — personnalisez les réponses de l'hôte</label>
+      <div id="questionsList" class="questions-list"></div>
+
+      <div class="row">
+        <button id="createRoom" class="btn primary">Terminer & Générer le lien</button>
+        <button id="previewRoom" class="btn ghost">Aperçu</button>
+      </div>
+
+      <div id="createdBox" class="created hidden"></div>
+      <p class="small muted">Les joueurs devront vérifier un code MonCash/NatCash si la room est premium.</p>
+    </section>
   </main>
 
-<script>
-  const QUESTIONS = [
-    "Quel est ton plat préféré ?",
-    "Quel est ton sport préféré ?",
-    "Quel est ton animal préféré ?",
-    "Quelle est ta couleur préférée ?",
-    "Quel est ton rêve le plus fou ?"
-  ];
-
-  const params = new URLSearchParams(location.search);
-  const uid = params.get('uid') || localStorage.getItem('lastCreatedUID');
-  if(!uid){ alert('UID manquant'); location.href='index.html'; }
-  const key = `defi_room_${uid}`;
-  const raw = JSON.parse(localStorage.getItem(key) || '{}');
-  const host = raw.host || raw.host || (localStorage.getItem('creatorName') || 'Hôte');
-
-  document.getElementById('title').textContent = `Créer le défi de ${host}`;
-
-  const qList = document.getElementById('qList');
-  QUESTIONS.forEach((q,i)=>{
-    const div = document.createElement('div');
-    div.className = 'question';
-    div.innerHTML = `<label>${i+1}. ${q}</label><input type="text" id="a${i}" placeholder="Ta réponse..." />`;
-    qList.appendChild(div);
-  });
-
-  document.getElementById('btnFinish').addEventListener('click', ()=>{
-    const answers = QUESTIONS.map((_,i)=> (document.getElementById(`a${i}`).value||'').trim());
-    if(answers.some(a=>!a)){ if(!confirm('Certaines réponses sont vides. Continuer quand même ?')) return; }
-    const premium = document.getElementById('isPremium').checked;
-    const room = { host, uid, answers, players: [], premium: !!premium, createdAt: new Date().toISOString() };
-    localStorage.setItem(key, JSON.stringify(room));
-    const base = location.origin + location.pathname.replace(/\/[^/]*$/,'/');
-    const link = `${base}play.html?uid=${encodeURIComponent(uid)}`;
-    document.getElementById('created').classList.remove('hidden');
-    document.getElementById('created').innerHTML = `
-      <h3>Ton UID : <strong>${uid}</strong></h3>
-      <p class="small muted">Lien pour jouer : <input readonly value="${link}" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd"></p>
-      <div class="row">
-        <a class="btn" href="play.html?uid=${encodeURIComponent(uid)}">Voir ma salle & leaderboard</a>
-        <button class="btn" id="copyLink">Copier lien</button>
-      </div>
-    `;
-    document.getElementById('copyLink').addEventListener('click', ()=>{ navigator.clipboard.writeText(link); alert('Lien copié !'); });
-  });
-</script>
+  <script type="module" src="app-plus.js"></script>
 </body>
 </html>
