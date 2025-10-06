@@ -1,45 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Défi-Amis+ — Premium</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Défi-Amis+ Premium</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-plus">
-  <main class="card center">
-    <div class="logo">Défi-Amis<span class="plus">+</span></div>
-    <h1>Version Premium</h1>
-    <p class="muted">Avatars, thèmes, mode «Crush ou Ami?», badges, partage & plus.</p>
+<body>
 
-    <div class="row">
-      <!-- Create only if user has access (PIV or code) -->
-      <button id="btnCreate" class="btn primary">Créer un défi Premium</button>
-      <a class="btn ghost" href="play.html">Rejoindre / Jouer</a>
+  <audio id="bg-music" src="assets/theme.mp3" autoplay loop></audio>
+
+  <header>
+    <h1>🎯 Défi-Amis+ Premium</h1>
+    <p>Teste ton amitié, découvre qui te connaît le mieux 💬</p>
+  </header>
+
+  <main>
+    <div class="options">
+      <button id="playBtn">🎮 Jouer un défi</button>
+      <button id="createBtn" class="locked">🚫 Créer un défi (VIP uniquement)</button>
     </div>
 
-    <p class="small muted">Si vous n'avez pas encore d'accès, entrez un code PIV ou un code fourni par le créateur pour débloquer la création.</p>
-
-    <div style="margin-top:14px;">
-      <button id="btnEnterPiv" class="btn ghost">Entrer un code PIV / Accès</button>
-    </div>
-
-    <div id="modal" class="modal hidden">
-      <div class="modal-card">
-        <h3>Accès Premium</h3>
-        <p>Entrez un code PIV (gratuit) ou un code d'accès (MonCash/NatCash) :</p>
-        <input id="accessCodeInput" placeholder="Votre code PIV / code d'accès" />
-        <div class="row" style="margin-top:8px">
-          <button id="validateCode" class="btn primary">Valider</button>
-          <button id="closeModal" class="btn ghost">Annuler</button>
-        </div>
-        <p class="small muted" style="margin-top:8px">Si vous êtes l'admin, ajoutez des codes PIV dans Firestore (collection <code>piv_codes</code>).</p>
-      </div>
-    </div>
-
-    <footer class="small muted" style="margin-top:18px">© Défi-Amis+ — Premium</footer>
+    <section class="vip">
+      <h3>💎 Devenir VIP</h3>
+      <p>Accès complet à la version Premium — avatars, musique, classements et modes exclusifs.</p>
+      <p><b>Prix :</b> 50 HTG via <b>NatCash</b></p>
+      <p><b>Numéro :</b> 509 5586 5621</p>
+      <a href="peman.html" class="vip-btn">🔓 Accéder à la zone VIP</a>
+    </section>
   </main>
 
-  <script type="module" src="app-plus.js"></script>
+  <footer>
+    <p>© 2025 Défi-Amis+. Créé par <b>Tchoulo</b> — Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    const isVIP = localStorage.getItem("isVIP");
+    const playBtn = document.getElementById("playBtn");
+    const createBtn = document.getElementById("createBtn");
+
+    playBtn.onclick = () => {
+      window.location.href = "jeu.html";
+    };
+
+    if (isVIP === "true") {
+      createBtn.classList.remove("locked");
+      createBtn.innerText = "✨ Créer mon défi";
+      createBtn.onclick = () => window.location.href = "jeu.html";
+    } else {
+      createBtn.onclick = () => alert("❌ Tu dois être VIP pour créer ton propre défi !");
+    }
+  </script>
 </body>
 </html>
