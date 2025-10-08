@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Devenir VIP — Défi-Amis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page card">
+    <h2>👑 Devenir VIP</h2>
+    <p>Pour pouvoir <strong>créer</strong> des défis (mode Ami / Crush), deviens VIP :</p>
+
+    <p><strong>Montant :</strong> 50 HTG</p>
+    <p><strong>NatCash :</strong> 509 5586 5621</p>
+    <p><strong>Support WhatsApp :</strong> <a href="https://wa.me/50936484174" target="_blank">+509 3648 4174</a></p>
+
+    <label>Ton prénom (pour recevoir l’accès)</label>
+    <input id="vipName" placeholder="Ex : Tchoulo">
+
+    <label>Numéro transaction / référence</label>
+    <input id="vipTxn" placeholder="Ex : TXN-20250812-001">
+
+    <div class="row">
+      <button id="btnRequest" class="btn primary">J'ai payé — Demander VIP</button>
+      <button class="btn ghost" onclick="location.href='index.html'">Retour</button>
+    </div>
+
+    <p class="muted">Après ta demande, l'administrateur pourra valider le paiement. Tu recevras l'accès VIP (manuellement).</p>
+
+    <div id="status" class="small muted"></div>
+  </main>
+
+  <script type="module">
+    import { requestVip } from './app.js';
+    document.getElementById('btnRequest').onclick = async () => {
+      const name = document.getElementById('vipName').value.trim();
+      const txn = document.getElementById('vipTxn').value.trim();
+      if(!name || !txn) return alert('Remplis ton prénom et la référence de transaction.');
+      try{
+        await requestVip(name, txn);
+        document.getElementById('status').textContent = "✅ Demande envoyée. L'administrateur va valider la transaction.";
+      }catch(e){ alert('Erreur: '+e.message); }
+    };
+  </script>
+</body>
+</html>
