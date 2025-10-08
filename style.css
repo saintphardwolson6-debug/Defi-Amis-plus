@@ -1,52 +1,30 @@
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #000000, #2b2b2b);
-  color: #FFD700;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
+/* style.css — Thème noir & or */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+:root{ --gold:#FFD700; --dark:#0b0b0b; --muted:#9a9a9a; --card:rgba(255,255,255,0.03) }
 
-header {
-  padding: 20px;
-  background-color: #111;
-  border-bottom: 2px solid #FFD700;
-}
-
-h1 {
-  color: #FFD700;
-  text-shadow: 0 0 10px #FFD700;
-}
-
-.card {
-  background: rgba(255, 215, 0, 0.1);
-  border: 1px solid #FFD700;
-  border-radius: 10px;
-  width: 80%;
-  margin: 30px auto;
-  padding: 20px;
-}
-
-button {
-  background-color: #FFD700;
-  color: #111;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  margin: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #111;
-  color: #FFD700;
-  border: 1px solid #FFD700;
-}
-
-footer {
-  padding: 20px;
-  font-size: 0.9em;
-  color: #888;
-}
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;margin:0;padding:0}
+body{background:linear-gradient(180deg,#050505,#151515);color:var(--gold);min-height:100vh}
+.page{max-width:980px;margin:28px auto;padding:18px}
+.logo{height:60px;margin:0 auto 12px;display:block}
+h1,h2{color:var(--gold);text-align:center;text-shadow:0 0 10px rgba(255,215,0,0.08)}
+.lead{color:var(--muted);text-align:center;margin-bottom:18px}
+.card{background:var(--card);border:1px solid rgba(255,215,0,0.08);padding:14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+.actions{display:flex;gap:12px;justify-content:center;margin:18px 0}
+.btn{padding:10px 16px;border-radius:10px;border:2px solid rgba(255,215,0,0.12);background:transparent;color:var(--gold);cursor:pointer;font-weight:700;min-width:140px}
+.btn.primary{background:linear-gradient(90deg,var(--gold),#ffdf7a);color:#111}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+.small{font-size:0.9rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
+input[type="text"], input, select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--gold)}
+.quizItem{background:rgba(255,215,0,0.02);padding:10px;border-radius:8px;margin-top:10px}
+.optionBtn{padding:10px 12px;margin:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--gold);cursor:pointer}
+.optionBtn.selected{box-shadow:0 6px 18px rgba(255,215,0,0.06);transform:translateY(-2px)}
+.podium{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.podium .slot{background:#fff;color:#111;padding:10px;border-radius:8px;min-width:120px;text-align:center}
+.leaderboard{margin-top:12px;padding-left:18px;color:var(--muted)}
+.created{background:#0f1720;padding:12px;border-radius:8px;margin-top:12px}
+.hostRow{display:flex;gap:12px;align-items:center}
+.avatar{width:72px;height:72px;border-radius:12px;object-fit:cover}
+.item{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03)}
+@media(max-width:720px){ .podium{flex-direction:column} .row{flex-direction:column} .actions{flex-direction:column} }
