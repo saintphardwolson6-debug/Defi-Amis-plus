@@ -1,24 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classement - Défi-Amis+ GOLD</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jouer — Défi-Amis</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🏆 Classement Défi-Amis+</h1>
-  </header>
+  <main class="page card">
+    <h2>🎲 Jouer au Défi</h2>
 
-  <section class="card">
-    <div id="classement"></div>
-  </section>
+    <div id="roomOpen">
+      <label>Colle le lien ou entre l'UID :</label>
+      <input id="uidInput" placeholder="Ex : DEF-ABC12">
+      <div class="row">
+        <button id="btnOpen" class="btn primary">Ouvrir le défi</button>
+        <button id="btnFromUrl" class="btn ghost">Ouvrir depuis URL</button>
+      </div>
+    </div>
 
-  <footer>
-    <button onclick="window.location.href='index.html'">⬅️ Retour</button>
-  </footer>
+    <div id="roomBlock" class="hidden">
+      <div class="hostRow">
+        <img id="hostAvatar" src="" alt="avatar" class="avatar" onerror="this.style.display='none'">
+        <div>
+          <h3 id="hostName"></h3>
+          <p id="roomMeta" class="muted"></p>
+        </div>
+      </div>
 
-  <script type="module" src="script.js"></script>
+      <div id="quizArea"></div>
+
+      <div id="playerForm" class="row">
+        <input id="playerName" placeholder="Ton prénom">
+        <button id="startBtn" class="btn primary">Commencer</button>
+      </div>
+
+      <div id="resultBox" class="created hidden"></div>
+
+      <h3 class="muted">Classement — Les amis de <span id="hostDisplay"></span></h3>
+      <div id="podium" class="podium"></div>
+      <ol id="leaderboard" class="leaderboard"></ol>
+
+      <div class="row">
+        <button id="shareWA" class="btn">Partager sur WhatsApp</button>
+        <button id="copyLink" class="btn ghost">Copier le lien</button>
+      </div>
+
+      <div id="ownerPanel" class="hidden card">
+        <h4>🔒 Panel propriétaire</h4>
+        <p>Vous avez entré l'OwnerCode valide — vous pouvez voir et vérifier les joueurs ci-dessus.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn ghost" onclick="location.href='index.html'">Retour</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { openRoomByUID, submitPlayerResult, listenRoomPlayers } from './app.js';
+
+    const uidInput = document.getElementById('uidInput');
+    const btnOpen = document.getElementById('btnOpen');
+    const btnFromUrl = document.getElementById('btnFromUrl');
+    const roomBlock = document.getElementById('roomBlock');
+    const hostAvatar = document.getElementById('hostAvatar');
+    const hostNameEl = document.getElementById('hostName');
+    const roomMeta = document.getElementById('roomMeta');
+    const quizArea = document.getElementById('quizArea');
+    const playerName = document.getElementById('playerName');
+    const startBtn = document.getElementById('startBtn');
+    const resultBox = document.getElementById('resultBox');
+    const hostDisplay = document.getElementById('hostDisplay');
+    const podium = document.getElementById('podium');
+    const leaderboard = document.getElementById('leaderboard');
+    const shareWA = document.getElementById('shareWA');
+    const copyLink = document.getElementById('copyLink');
+    const ownerPanel = document.getElementById('ownerPanel');
+
+    let currentRoom = null;
+    let currentUID = null;
+    let answers = {};
+
+    btnOpen.onclick = ()=> {
+      let v = uidInput.value.trim();
+      if(!v) return alert('Entre un UID ou colle le lien.');
+      try{
+        const u = new URL(v);
+        const p = new URLSearchParams(u.search);
+        if(p.get('uid')) v = p.get('uid');
+      }catch(e){}
+      open(v);
+    };
+
+    btnFromUrl.onclick = ()=> {
+      const params = new URLSearchParams(location.search);
+      const uid = params.get('uid');
+      if(uid) open(uid);
+      else alert('Aucun UID dans l\'URL.');
+    };
+
+    async function open(uid){
+      const room = await openRoomByUID(uid);
+      if(!room) return alert('Défi introuvable.');
+      currentRoom = room; currentUID = uid;
+      hostAvatar.src = room.avatar || '';
+      hostNameEl.textContent = room.host;
+      roomMeta.textContent = `${room.mode === 'ami' ? 'Mode Ami' : 'Mode Crush'} • Premium`;
+      hostDisplay.textContent = room.host;
+      renderQuestions(room);
+      roomBlock.classList.remove('hidden');
+
+      // listen for live players to update leaderboard
+      listenRoomPlayers(uid, (arr)=> renderLeaderboard(arr));
+
+      // owner check via param owner
+      const params = new URLSearchParams(location.search);
+      const ownerParam = params.get('owner');
+      if(ownerParam && ownerParam === room.ownerCode){
+        ownerPanel.classList.remove('hidden');
+      }
+    }
+
+    function renderQuestions(room){
+      quizArea.innerHTML = '';
+      room.questions.forEach((q,i)=>{
+        const div = document.createElement('div'); div.className='quizItem';
+        div.innerHTML = `<p>${i+1}. ${q.question}</p>`;
+        q.options.forEach((opt, idx)=>{
+          const b = document.createElement('button');
+          b.className='optionBtn';
+          b.textContent = opt;
+          b.onclick = ()=> {
+            answers[i] = idx;
+            // visual
+            const siblings = b.parentNode.querySelectorAll('.optionBtn');
+            siblings.forEach(s=>s.classList.remove('selected'));
+            b.classList.add('selected');
+          };
+          div.appendChild(b);
+        });
+        quizArea.appendChild(div);
+      });
+    }
+
+    startBtn.onclick = async ()=>{
+      const name = playerName.value.trim();
+      if(!name) return alert('Entre ton prénom.');
+      // calcul score
+      const total = currentRoom.questions.length;
+      let score = 0;
+      currentRoom.questions.forEach((q,i)=>{
+        const given = typeof answers[i] === 'number' ? answers[i] : -1;
+        if(given === q.answer) score++;
+      });
+      // save result
+      await submitPlayerResult(currentUID, { name, score, date: new Date().toISOString(), verified:false });
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = `<h3>Résultat : ${score} / ${total}</h3>
+        <p>Merci d'avoir joué — partage le lien pour défier tes amis !</p>`;
+    };
+
+    function renderLeaderboard(list){
+      leaderboard.innerHTML = '';
+      if(!list.length){ leaderboard.innerHTML = '<li>Aucun joueur</li>'; podium.innerHTML=''; return; }
+      // sort desc
+      list.sort((a,b)=> b.score - a.score);
+      const top3 = list.slice(0,3);
+      podium.innerHTML = top3.map((p,i)=>`<div class="slot">${i===0?'🥇':i===1?'🥈':'🥉'}<br><strong>${p.name}</strong><div>${p.score}</div></div>`).join('');
+      list.forEach(p=>{
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${p.name}</strong> — ${p.score} pts ${p.verified?'<span class="small">✅ vérifié</span>':''}`;
+        leaderboard.appendChild(li);
+      });
+    }
+
+    shareWA.onclick = ()=>{
+      if(!currentUID) return alert('Ouvre d\'abord le défi.');
+      const link = `${location.origin + location.pathname.replace(/play.html.*/,'')}play.html?uid=${currentUID}`;
+      const text = encodeURIComponent(`Viens deviner mes réponses sur Défi-Amis ! ${link}`);
+      window.open(`https://wa.me/?text=${text}`,'_blank');
+    };
+
+    copyLink.onclick = ()=>{
+      if(!currentUID) return alert('Ouvre d\'abord le défi.');
+      const link = `${location.origin + location.pathname.replace(/play.html.*/,'')}play.html?uid=${currentUID}`;
+      navigator.clipboard.writeText(link).then(()=> alert('Lien copié !'));
+    };
+
+    // auto open if param uid present
+    const params = new URLSearchParams(location.search);
+    const uidParam = params.get('uid');
+    if(uidParam) open(uidParam);
+  </script>
 </body>
 </html>
