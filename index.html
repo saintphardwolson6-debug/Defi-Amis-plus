@@ -1,37 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Défi-Amis+ GOLD</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Défi-Amis — Accueil</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="page">
+    <img src="logo.png" alt="Logo Défi-Amis" class="logo" onerror="this.style.display='none'">
+    <h1>🎯 Défi-Amis</h1>
+    <p class="lead">Teste tes amis — découvre qui te connaît le mieux !</p>
 
-  <audio id="bgMusic" autoplay loop>
-    <source src="music/background.mp3" type="audio/mpeg">
-  </audio>
+    <div class="actions">
+      <button class="btn primary" onclick="location.href='play.html'">🎮 JOUER (gratuit)</button>
+      <button class="btn" onclick="location.href='vip.html'">👑 DEVENIR VIP (créer)</button>
+      <button class="btn ghost" onclick="location.href='classement.html'">🏆 CLASSEMENTS</button>
+    </div>
 
-  <header>
-    <h1>💛 Défi-Amis+ GOLD</h1>
-    <p>Teste ton amitié, ton crush, ou ta loyauté — version exclusive</p>
-  </header>
+    <p class="small">Support WhatsApp : <a href="https://wa.me/50936484174" target="_blank">+509 3648 4174</a></p>
+  </main>
 
-  <section class="card">
-    <h2>Bienvenue sur Défi-Amis+</h2>
-    <p>Choisis ton expérience :</p>
-
-    <button onclick="startDefi()">🎮 Créer un Défi</button>
-    <button onclick="checkVIP()">💰 Devenir VIP (50 HTG)</button>
-    <button onclick="goClassement()">🏆 Classement</button>
-
-    <p id="status"></p>
-  </section>
-
-  <footer>
-    <p>© 2025 Défi-Amis+ GOLD | Par Tchoulo 🔱</p>
-  </footer>
-
-  <script type="module" src="script.js"></script>
+  <script src="app.js" type="module"></script>
 </body>
 </html>
