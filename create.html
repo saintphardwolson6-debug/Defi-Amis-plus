@@ -1,44 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créer un Défi - Défi-Amis+ GOLD</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Créer un Défi — Défi-Amis</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="page card">
+    <h2>✍️ Créer un Défi (VIP)</h2>
+    <p class="muted">Seuls les utilisateurs validés peuvent créer un défi.</p>
 
-  <header>
-    <h1>🧠 Crée ton Défi</h1>
-    <p>Réponds à quelques questions pour tester tes amis ou ton crush 💘</p>
-  </header>
+    <label>Ton prénom (hôte)</label>
+    <input id="hostName" placeholder="Ex : Tchoulo">
 
-  <section class="card">
-    <label>Mode :</label>
+    <label>Mode</label>
     <select id="mode">
-      <option value="ami">Défi Ami 💛</option>
-      <option value="crush">Défi Crush 💘</option>
+      <option value="ami">Mode Ami (questions sur ton ami)</option>
+      <option value="crush">Mode Crush (questions romantique)</option>
     </select>
 
-    <label>Ton nom :</label>
-    <input type="text" id="nom" placeholder="Ex : Tchoulo">
+    <div id="questionsArea" class="card small muted"></div>
 
-    <label>Question 1 :</label>
-    <input type="text" id="q1" placeholder="Ton plat préféré ?">
+    <div class="row">
+      <button id="btnCreate" class="btn primary">Valider & Générer Défi</button>
+      <button class="btn ghost" onclick="location.href='index.html'">Annuler</button>
+    </div>
 
-    <label>Question 2 :</label>
-    <input type="text" id="q2" placeholder="Ton sport favori ?">
+    <div id="result" class="created hidden"></div>
+  </main>
 
-    <label>Question 3 :</label>
-    <input type="text" id="q3" placeholder="Ta plus grande qualité ?">
+  <script type="module">
+    import { isVipUser, generateRoom } from './app.js';
 
-    <button onclick="saveDefi()">✅ Enregistrer le Défi</button>
-  </section>
+    const modeSel = document.getElementById('mode');
+    const qArea = document.getElementById('questionsArea');
+    const hostNameEl = document.getElementById('hostName');
+    const btnCreate = document.getElementById('btnCreate');
+    const resultDiv = document.getElementById('result');
 
-  <footer>
-    <p>💎 Version VIP activée — Gold Access 🔓</p>
-  </footer>
+    const defaultQuestions = {
+      ami: [
+        { q: "Quel est son plat préféré ?", opts:["Pizza","Riz collé","Burger","Fritay"], ans:0 },
+        { q: "Quel est son sport favori ?", opts:["Football","Basket","Tennis","Natation"], ans:0 },
+        { q: "Quel est sa couleur préférée ?", opts:["Bleu","Rouge","Noir","Or"], ans:0 },
+        { q: "Quel est son passe-temps favori ?", opts:["Jeux vidéo","Lecture","Musique","Sport"], ans:2 },
+        { q: "Son animal préféré ?", opts:["Chien","Chat","Oiseau","Lion"], ans:0 },
+        { q: "Quel est son film préféré ?", opts:["Avengers","Titanic","Fast & Furious","Inception"], ans:3 },
+        { q: "Sa boisson favorite ?", opts:["Coca","Jus","Café","Thé"], ans:1 },
+        { q: "Quel pays veut-il visiter ?", opts:["France","USA","Japon","Brésil"], ans:2 },
+        { q: "Quel est son réseau préféré ?", opts:["Instagram","TikTok","Snapchat","WhatsApp"], ans:0 },
+        { q: "Quel est son métier de rêve ?", opts:["Chanteur","Professeur","Entrepreneur","Médecin"], ans:3 }
+      ],
+      crush: [
+        { q: "Quelle est la première chose que je remarque chez toi ?", opts:["Ton sourire","Tes yeux","Ta voix","Ton style"], ans:0 },
+        { q: "Comment je t’appelle ?", opts:["Bébé","Chéri(e)","Crush","Mon cœur"], ans:1 },
+        { q: "Où j’aimerais t’emmener ?", opts:["Plage","Restaurant","Cinéma","Parc"], ans:1 },
+        { q: "Quel cadeau j’aimerais t’offrir ?", opts:["Fleurs","Bijoux","Chocolat","Voyage"], ans:0 },
+        { q: "Quelle est ma chanson romantique préférée ?", opts:["Perfect","Love","Mon cœur","Toi seul"], ans:0 },
+        { q: "Quelle est ma couleur d’amour ?", opts:["Rouge","Rose","Blanc","Noir"], ans:0 },
+        { q: "Quel petit geste me plaît le plus ?", opts:["Un message","Un cadeau","Un compliment","Un câlin"], ans:2 },
+        { q: "Quelle activité romantique j’adore ?", opts:["Dîner","Promenade","Cinéma","Voyage"], ans:0 },
+        { q: "Quelle est ma crainte en amour ?", opts:["Rejet","Tristesse","Mensonge","Distance"], ans:2 },
+        { q: "Que je préfère recevoir ?", opts:["Temps","Cadeaux","Paroles","Soutien"], ans:0 }
+      ]
+    };
 
-  <script type="module" src="script.js"></script>
+    function renderPreview(mode, host){
+      const list = defaultQuestions[mode];
+      qArea.innerHTML = `<p>Les questions (tu pourras les éditer si tu veux) :</p>`;
+      list.forEach((qq,i)=>{
+        // replace placeholders with host name where utile
+        const question = qq.q.replace(/__NOM__/g, host || 'Hôte');
+        qArea.innerHTML += `<div class="quizItem"><strong>Q${i+1}:</strong> ${question}<br>
+          ${qq.opts.map((o,idx)=>`<span class="opt">(${idx+1}) ${o}</span>`).join(' ')}</div>`;
+      });
+    }
+
+    // show preview on mode or host change
+    modeSel.onchange = ()=> renderPreview(modeSel.value, hostNameEl.value);
+    hostNameEl.oninput = ()=> renderPreview(modeSel.value, hostNameEl.value);
+    renderPreview(modeSel.value, '');
+
+    btnCreate.onclick = async ()=>{
+      const host = hostNameEl.value.trim();
+      if(!host) return alert('Entrez votre prénom (hôte).');
+      if(!isVipUser(host)) return alert('Accès refusé : Vous devez être VIP validé par l’administrateur.');
+      // build room with questions (insert host name if needed)
+      const mode = modeSel.value;
+      const questions = defaultQuestions[mode].map(q=>{
+        return { question: q.q.replace(/__NOM__/g, host), options:q.opts, answer:q.ans };
+      });
+      const room = await generateRoom({ host, mode, questions });
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = `<p>✅ Défi créé !</p>
+        <p><strong>UID :</strong> ${room.uid}</p>
+        <p><strong>OwnerCode :</strong> ${room.ownerCode} (conserve-le)</p>
+        <p>Lien de partage : <input readonly style="width:100%" value="${location.origin + location.pathname.replace(/create.html.*/,'')}play.html?uid=${room.uid}"></p>`;
+    };
+  </script>
 </body>
 </html>
